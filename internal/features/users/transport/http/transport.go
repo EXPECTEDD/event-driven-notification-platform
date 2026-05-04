@@ -13,6 +13,11 @@ type UserService interface {
 		ctx context.Context,
 		input users_service.RegisterUserInput,
 	) (users_service.RegisterUserOutput, error)
+
+	DeleteUser(
+		ctx context.Context,
+		id int,
+	) error
 }
 
 type UserHTTPHandler struct {
@@ -30,9 +35,13 @@ func NewUserHTTPHandler(
 func (h *UserHTTPHandler) GetRoutes() []core_http_server.Route {
 	return []core_http_server.Route{
 		{
-			Path:    "/user/register",
+			Path:    "/user/registration",
 			Method:  http.MethodPost,
 			Handler: h.RegisterUser,
+		}, {
+			Path:    "/user/{id}",
+			Method:  http.MethodDelete,
+			Handler: h.DeleteUser,
 		},
 	}
 }
