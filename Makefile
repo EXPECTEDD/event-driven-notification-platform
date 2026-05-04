@@ -54,3 +54,8 @@ port-forwarder-up:
 
 port-forwarder-down:
 	@$(DOCKER_COMPOSE) down port-forwarder;
+
+start:
+	@mkdir -p $(PROJECT_ROOT)/out/logs && \
+	export LOGGER_FOLDER=$(PROJECT_ROOT)/out/logs && \
+	go run cmd/notifapp/main.go;
