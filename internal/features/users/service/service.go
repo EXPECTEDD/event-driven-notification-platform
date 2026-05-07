@@ -14,9 +14,25 @@ type Hasher interface {
 
 type UserRepository interface {
 	SaveUser(
-		context.Context,
-		core_user_domain.User,
+		ctx context.Context,
+		user core_user_domain.User,
 	) (core_user_domain.User, error)
+
+	DeleteUser(
+		ctx context.Context,
+		id int,
+	) error
+
+	GetUser(
+		ctx context.Context,
+		id int,
+	) (core_user_domain.User, error)
+
+	GetUsers(
+		ctx context.Context,
+		limit *int,
+		offset *int,
+	) ([]core_user_domain.User, error)
 }
 
 type UserService struct {
