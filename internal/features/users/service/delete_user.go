@@ -4,20 +4,19 @@ import (
 	"context"
 	"fmt"
 
-	core_error "github.com/EXPECTEDD/event-driven-notification-platform/internal/core/error"
+	core_http_utils "github.com/EXPECTEDD/event-driven-notification-platform/internal/core/transport/http/utils"
 )
 
 func (s *UserService) DeleteUser(
 	ctx context.Context,
 	id int,
 ) error {
-	if id <= 0 {
-		return fmt.Errorf("invalid `id` value: %w",
-			core_error.ErrInvalidArgument,
-		)
+	err := core_http_utils.ValidateID(id)
+	if err != nil {
+		return fmt.Errorf("validate ID: %w", err)
 	}
 
-	err := s.userRepository.DeleteUser(ctx, id)
+	err = s.userRepository.DeleteUser(ctx, id)
 	if err != nil {
 		return fmt.Errorf("delete user from repository: %w",
 			err,

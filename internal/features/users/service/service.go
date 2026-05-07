@@ -22,6 +22,17 @@ type UserRepository interface {
 		ctx context.Context,
 		id int,
 	) error
+
+	GetUser(
+		ctx context.Context,
+		id int,
+	) (core_user_domain.User, error)
+
+	GetUsers(
+		ctx context.Context,
+		limit *int,
+		offset *int,
+	) ([]core_user_domain.User, error)
 }
 
 type UserService struct {

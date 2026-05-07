@@ -9,30 +9,31 @@ import (
 )
 
 var (
-	invalidID = -1
+	invalidInt = -1
 )
 
-func GetPathValueInt(
+func GetIntPathValue(
 	r *http.Request,
-	val string,
+	key string,
 ) (int, error) {
-	idStr := r.PathValue(val)
-	if idStr == "" {
-		return invalidID, fmt.Errorf(
+	path := r.PathValue(key)
+	if path == "" {
+		return invalidInt, fmt.Errorf(
 			"empty `%s` path value: %w",
-			val,
+			key,
 			core_error.ErrInvalidArgument,
 		)
 	}
 
-	id, err := strconv.Atoi(idStr)
+	val, err := strconv.Atoi(path)
 	if err != nil {
-		return invalidID, fmt.Errorf(
-			"invalid '%s' type: %w",
-			val,
+		return invalidInt, fmt.Errorf(
+			"path=%s by key=%s not a valid integer: %w",
+			path,
+			key,
 			core_error.ErrInvalidArgument,
 		)
 	}
 
-	return id, nil
+	return val, nil
 }

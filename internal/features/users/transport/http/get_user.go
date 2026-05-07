@@ -8,7 +8,14 @@ import (
 	core_http_utils "github.com/EXPECTEDD/event-driven-notification-platform/internal/core/transport/http/utils"
 )
 
-func (h *UserHTTPHandler) DeleteUser(
+type GetUserResponse struct {
+	FullName    string
+	Email       string
+	PhoneNumber *string
+	Telegram    *string
+}
+
+func (h *UserHTTPHandler) GetUser(
 	rw http.ResponseWriter,
 	r *http.Request,
 ) {
@@ -24,15 +31,22 @@ func (h *UserHTTPHandler) DeleteUser(
 
 	err = core_http_utils.ValidateID(id)
 	if err != nil {
-		responseHandler.ErrorResponse("validate id", err)
+		responseHandler.ErrorResponse("validate ID", err)
 		return
 	}
 
-	err = h.userService.DeleteUser(ctx, id)
+	out, err := h.userService.GetUser(ctx, id)
 	if err != nil {
-		responseHandler.ErrorResponse("delete user", err)
+		responseHandler.ErrorResponse("get user", err)
 		return
 	}
 
-	responseHandler.NoContentResponse()
+	response := GetUserResponse{
+		FullName:    out.FullName,
+		Email:       out.Email,
+		PhoneNumber: out.PhoneNumber,
+		Telegram:    out.Telegram,
+	}
+
+	responseHandler.SendResponse(response, http.StatusOK)
 }
